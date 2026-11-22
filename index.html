@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6f7fb" />
+  <meta name="description" content="StudyVerse is a student productivity dashboard for tasks, attendance, exams, notes and focused study sessions." />
+  <title>StudyVerse — Your academic space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="StudyVerse home">
+        <span class="brand-mark">S</span><span>study<span class="brand-light">verse</span></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-link active" data-view="overview"><span class="nav-icon">▦</span> Overview</button>
+        <button class="nav-link" data-view="tasks"><span class="nav-icon">☑</span> My tasks <span class="nav-count" id="taskNavCount">0</span></button>
+        <button class="nav-link" data-view="attendance"><span class="nav-icon">◷</span> Attendance</button>
+        <button class="nav-link" data-view="exams"><span class="nav-icon">▤</span> Exams</button>
+        <button class="nav-link" data-view="focus"><span class="nav-icon">◉</span> Focus room</button>
+        <button class="nav-link" data-view="notes"><span class="nav-icon">▧</span> Notes</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="upgrade-card">
+          <div class="upgrade-icon">✦</div>
+          <strong>Make space to grow.</strong>
+          <p>Small steps, consistent progress. Keep showing up.</p>
+        </div>
+        <div class="profile-row">
+          <div class="avatar">A</div>
+          <div><strong id="profileName">Student</strong><small>My workspace</small></div>
+          <button class="icon-button" id="editNameBtn" title="Edit name" aria-label="Edit name">···</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="menuBtn" aria-label="Open navigation">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumbCurrent">Overview</strong></div>
+        <div class="topbar-actions">
+          <span class="today-label" id="todayLabel"></span>
+          <button class="icon-button" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">◐</button>
+          <button class="primary-button small" id="quickAddBtn">＋ <span>New task</span></button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="welcome-row">
+          <div><p class="eyebrow">YOUR STUDY SPACE</p><h1>Good to see you, <span id="welcomeName">Student</span> <span class="wave">✦</span></h1><p class="muted">A little progress each day adds up to big results.</p></div>
+          <div class="date-chip"><span>◷</span><span id="fullDate"></span></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Tasks completed</span><span class="stat-icon purple">✓</span></div><div class="stat-value" id="completedStat">0</div><div class="stat-foot"><span class="positive">Your progress</span> this workspace</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Pending tasks</span><span class="stat-icon blue">↗</span></div><div class="stat-value" id="pendingStat">0</div><div class="stat-foot">Keep your next step clear</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Average attendance</span><span class="stat-icon green">◷</span></div><div class="stat-value" id="attendanceStat">—<small>%</small></div><div class="stat-foot">Across your subjects</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Upcoming exams</span><span class="stat-icon orange">▤</span></div><div class="stat-value" id="examStat">0</div><div class="stat-foot">On your exam calendar</div></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel task-panel">
+            <div class="panel-heading"><div><h2>Today's priorities</h2><p class="muted">Focus on what matters next.</p></div><button class="text-button" data-go="tasks">View all →</button></div>
+            <div id="priorityList" class="task-list empty-state"><div class="empty-icon">✦</div><strong>Nothing on your list yet</strong><p>Add a task and make today count.</p><button class="secondary-button" data-open-task>＋ Add your first task</button></div>
+          </section>
+          <section class="panel progress-panel">
+            <div class="panel-heading"><div><h2>Weekly momentum</h2><p class="muted">Your task completion snapshot.</p></div><span class="mini-pill">This week</span></div>
+            <div class="progress-number"><strong id="weeklyPercent">0%</strong><span class="muted">completed</span></div>
+            <div class="progress-track"><span id="weeklyBar"></span></div>
+            <div class="progress-legend"><span><i class="dot done"></i> Completed</span><span><i class="dot todo"></i> Remaining</span></div>
+            <div class="quote-box"><span>✧</span><p>“You don't have to do it all today. Just start with one thing.”</p></div>
+          </section>
+        </div>
+        <section class="panel upcoming-panel">
+          <div class="panel-heading"><div><h2>Coming up</h2><p class="muted">Deadlines and exams on your radar.</p></div><button class="text-button" data-go="exams">Manage exams →</button></div>
+          <div id="upcomingList" class="upcoming-list empty-inline">No upcoming deadlines yet. Add an assignment or exam to see it here.</div>
+        </section>
+      </section>
+
+      <section class="view" id="view-tasks">
+        <div class="page-heading"><div><p class="eyebrow">STAY ON TRACK</p><h1>My tasks</h1><p class="muted">Turn your to-do list into done.</p></div><button class="primary-button" data-open-task>＋ Add task</button></div>
+        <div class="filter-row"><div class="filter-tabs" id="taskFilters"><button class="selected" data-filter="all">All</button><button data-filter="active">Pending</button><button data-filter="completed">Completed</button></div><span class="muted" id="taskSummary"></span></div>
+        <div class="panel"><div id="allTasksList" class="task-list empty-state"><div class="empty-icon">☑</div><strong>Your task list is clear</strong><p>Add assignments, revision goals or reminders.</p></div></div>
+      </section>
+
+      <section class="view" id="view-attendance">
+        <div class="page-heading"><div><p class="eyebrow">SHOW UP FOR YOURSELF</p><h1>Attendance tracker</h1><p class="muted">Know where you stand in every subject.</p></div><button class="primary-button" id="addSubjectBtn">＋ Add subject</button></div>
+        <div class="notice"><span>ⓘ</span> Attendance is calculated from classes attended and total classes entered. Update it after each class.</div>
+        <div id="attendanceGrid" class="attendance-grid"></div>
+      </section>
+
+      <section class="view" id="view-exams">
+        <div class="page-heading"><div><p class="eyebrow">PREPARE WITH PURPOSE</p><h1>Exam calendar</h1><p class="muted">Keep important dates in one place.</p></div><button class="primary-button" id="addExamBtn">＋ Add exam</button></div>
+        <div id="examList" class="exam-grid"></div>
+      </section>
+
+      <section class="view" id="view-focus">
+        <div class="page-heading"><div><p class="eyebrow">DEEP WORK, ONE SESSION AT A TIME</p><h1>Focus room</h1><p class="muted">A quiet space to give one task your attention.</p></div></div>
+        <div class="focus-layout">
+          <div class="panel timer-panel">
+            <div class="timer-mode" id="timerModes"><button class="selected" data-minutes="25" data-mode="Focus">Focus</button><button data-minutes="5" data-mode="Short break">Short break</button><button data-minutes="15" data-mode="Long break">Long break</button></div>
+            <div class="timer-ring" id="timerRing"><div class="timer-inner"><span id="timerDisplay">25:00</span><small id="timerModeLabel">FOCUS SESSION</small></div></div>
+            <div class="timer-controls"><button class="primary-button" id="timerStart">Start focus</button><button class="secondary-button" id="timerReset">Reset</button></div>
+            <p class="muted timer-hint" id="timerHint">25 minutes of focused work. You've got this.</p>
+          </div>
+          <div class="panel focus-side"><div class="panel-heading"><div><h2>Focus checklist</h2><p class="muted">Before you begin.</p></div></div><ul class="checklist"><li>Choose one specific task.</li><li>Put distractions out of reach.</li><li>Keep water nearby.</li><li>Take a real break when the timer ends.</li></ul><div class="focus-note"><span>✧</span><div><strong>Progress over perfection</strong><p>One focused session is a win. Build from there.</p></div></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-notes">
+        <div class="page-heading"><div><p class="eyebrow">THINK IT. WRITE IT. KEEP IT.</p><h1>My notes</h1><p class="muted">A simple space for ideas, reminders and class notes.</p></div><button class="primary-button" id="addNoteBtn">＋ New note</button></div>
+        <div id="notesGrid" class="notes-grid"></div>
+      </section>
+
+      <footer class="footer">Made for focused minds <span>✦</span> StudyVerse</footer>
+    </main>
+  </div>
+
+  <dialog id="taskDialog" class="modal">
+    <form method="dialog" id="taskForm"><div class="modal-heading"><div><p class="eyebrow">MAKE A PLAN</p><h2>Add a task</h2></div><button class="icon-button close-dialog" aria-label="Close">×</button></div>
+      <label>Task title<input id="taskTitle" required maxlength="90" placeholder="e.g. Revise data structures" /></label>
+      <div class="form-row"><label>Due date<input id="taskDue" type="date" /></label><label>Priority<select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select></label></div>
+      <label>Subject / category<input id="taskSubject" maxlength="40" placeholder="e.g. Computer Science" /></label>
+      <div class="modal-actions"><button type="button" class="secondary-button close-dialog">Cancel</button><button type="submit" class="primary-button">Save task</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="subjectDialog" class="modal">
+    <form method="dialog" id="subjectForm"><div class="modal-heading"><div><p class="eyebrow">ATTENDANCE</p><h2>Add a subject</h2></div><button class="icon-button close-dialog" aria-label="Close">×</button></div>
+      <label>Subject name<input id="subjectName" required maxlength="50" placeholder="e.g. Mathematics" /></label>
+      <div class="form-row"><label>Classes attended<input id="classesAttended" type="number" min="0" value="0" required /></label><label>Total classes<input id="classesTotal" type="number" min="0" value="0" required /></label></div>
+      <div class="modal-actions"><button type="button" class="secondary-button close-dialog">Cancel</button><button type="submit" class="primary-button">Save subject</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="examDialog" class="modal">
+    <form method="dialog" id="examForm"><div class="modal-heading"><div><p class="eyebrow">SAVE THE DATE</p><h2>Add an exam</h2></div><button class="icon-button close-dialog" aria-label="Close">×</button></div>
+      <label>Exam / subject name<input id="examName" required maxlength="70" placeholder="e.g. Probability & Statistics" /></label>
+      <label>Exam date<input id="examDate" type="date" required /></label>
+      <label>Details (optional)<input id="examDetails" maxlength="100" placeholder="e.g. Unit 1–4" /></label>
+      <div class="modal-actions"><button type="button" class="secondary-button close-dialog">Cancel</button><button type="submit" class="primary-button">Save exam</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="noteDialog" class="modal">
+    <form method="dialog" id="noteForm"><div class="modal-heading"><div><p class="eyebrow">QUICK CAPTURE</p><h2 id="noteDialogTitle">New note</h2></div><button class="icon-button close-dialog" aria-label="Close">×</button></div>
+      <label>Title<input id="noteTitle" required maxlength="80" placeholder="Give your note a title" /></label>
+      <label>Your note<textarea id="noteBody" rows="6" maxlength="3000" placeholder="Write down an idea, concept or reminder..."></textarea></label>
+      <div class="modal-actions"><button type="button" class="secondary-button close-dialog">Cancel</button><button type="submit" class="primary-button">Save note</button></div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
